@@ -162,16 +162,6 @@
 (add-event-listener! (current-document) "keyup"
                      (procedure->external on-key-up))
 
-;;(define (on-input-up input)
-;;     (match input
-;;        ('left (
-;;          (set! game-x 0)))
-;;        ('right (
-;;          (set! game-x 0)))
-;;        ('up (
-;;          (set! game-y 0)))
-;;        ('down (
-;;          (set! game-y 0)))))
 
 (define (on-input-down input)
      (match input
@@ -206,29 +196,16 @@
                      (procedure->external (lambda (_) (resize-canvas))))
 (add-event-listener! (current-document) "keydown"
                      (procedure->external on-key-down))
-
-(define (register-touch-down elem-id input-id)
+(define (register-touch-control elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "click"
                        (procedure->external
                         (lambda (e) (on-input-down input-id)))))
 
-;;(define (register-touch-up elem-id input-id)
-;;  (add-event-listener! (get-element-by-id elem-id) "mouseup"
-;;                       (procedure->external
-;;                        (lambda (e) (on-input-up input-id)))))
-
-;;(register-touch-up "dpad-left" 'left)
-;;(register-touch-up "dpad-right" 'right)
-;;(register-touch-up "dpad-down" 'down)
-;;(register-touch-up "dpad-up" 'up)
-;;(register-touch-up "button-a" 'undo)
-
-(register-touch-down "dpad-left" 'left)
-(register-touch-down "dpad-right" 'right)
-(register-touch-down "dpad-down" 'down)
-(register-touch-down "dpad-up" 'up)
-(register-touch-down "button-a" 'undo)
-
+(register-touch-control "dpad-left" 'left)
+(register-touch-control "dpad-right" 'right)
+(register-touch-control "dpad-down" 'down)
+(register-touch-control "dpad-up" 'up)
+(register-touch-control "button-a" 'undo)
 (resize-canvas)
 
 (request-animation-frame draw-callback)
