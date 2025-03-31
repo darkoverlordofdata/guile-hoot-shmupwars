@@ -1,5 +1,13 @@
+@font-face {
+    font-family: 'monogram';
+    src: url('assets/fonts/monogram-extended.woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
-    /* background-color: #000; */
+    display: flex;
+    background-color: #222034;
     margin: 0;
     width: 100vw;
     height: 100vh;
@@ -7,5 +15,43 @@ body {
 
 canvas {
     display: block;
-    margin: 0 auto;
+    margin: auto auto;
+}
+
+img {
+    height: auto;
+    width: 100%;
+}
+
+@media (pointer: fine) {
+    #onscreen-controls {
+        display: none;
+    }
+}
+
+/* Onscreen controls for "coarse" pointer devices assumed to be
+   touchscreens on phones/tablets.  Inline SVG is used so that we can
+   attach click handlers to individual elements of the controls. */
+@media (pointer: coarse) {
+    #onscreen-controls {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    #onscreen-controls #dpad-container {
+        width: min(30vw,30vh);
+        height: min(30vw,30vh);
+        margin: 5%;
+    }
+
+    #onscreen-controls #button-container {
+        width: min(20vw,20vh);
+        height: min(20vw,20vh);
+        margin: 5%;
+        margin-left: auto;
+    }
 }
