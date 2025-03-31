@@ -64,15 +64,23 @@
 (define key:confirm       "Enter")
 
 (define dt                (/ 1000.0 60.0)) ; aim for updating at 60Hz
-(define game-width        512.0)
-(define game-height       512.0)
-
+;;(define game-width        512.0)
+;;(define game-height       512.0)
+(define game-width        480.0)
+(define game-height       480.0)
 (define game-x            0.0)
 (define game-y            0.0)
 
+(define *canvas-scale* 0.0)
+(define *canvas-width* 0)
+(define *canvas-height* 0)
+
+
+
 (define canvas            (get-element-by-id "canvas"))
 (define context           (get-context canvas "2d"))
-(define game              (make-game image:background (make-rect 0.0 0.0 512.0 512.0)))
+;;(define game              (make-game image:background (make-rect 0.0 0.0 512.0 512.0)))
+(define game              (make-game image:background (make-rect 0.0 0.0 480.0 480.0)))
 (define player            (make-player image:player (make-rect 202.0 170.0 54.0 87.0)))
 
 ;;
@@ -114,7 +122,6 @@
     (cond
     ((string=? key key:left)
       (set! game-x (- 0 1)))
-      
     ((string=? key key:right)
       (set! game-x 1))
     ((string=? key key:up)
@@ -154,5 +161,52 @@
                      (procedure->external on-key-down))
 (add-event-listener! (current-document) "keyup"
                      (procedure->external on-key-up))
+
+
+(define (on-input-down input)
+     (match input
+        ('left (
+          (set! game-x (- 0 1))))
+        ('right (
+          (set! game-x 1)))
+        ('up (
+          (set! game-y (- 0 1))))
+        ('down (
+          (set! game-y 1)))))
+
+(define (resize-canvas)
+  (let* ((win (current-window))
+         (w (window-inner-width win))
+         (h (window-inner-height win))
+         (gw (inexact->exact game-width))
+         (gh (inexact->exact game-height))
+         (scale (max (min (quotient w gw) (quotient h gh)) 1))
+         (cw (* gw scale))
+         (ch (* gh scale)))
+    (set-element-width! canvas cw)
+    (set-element-height! canvas ch)
+    (set-image-smoothing-enabled! context 0)
+    (set! *canvas-scale* (exact->inexact scale))
+    (set! *canvas-width* (* game-width *canvas-scale*))
+    (set! *canvas-height* (* game-height *canvas-scale*))))
+
+(set-element-width! canvas (inexact->exact game-width))
+(set-element-height! canvas (inexact->exact game-height))
+(add-event-listener! (current-window) "resize"
+                     (procedure->external (lambda (_) (resize-canvas))))
+(add-event-listener! (current-document) "keydown"
+                     (procedure->external on-key-down))
+(define (register-touch-control elem-id input-id)
+  (add-event-listener! (get-element-by-id elem-id) "click"
+                       (procedure->external
+                        (lambda (e) (on-input-down input-id)))))
+
+(register-touch-control "dpad-left" 'left)
+(register-touch-control "dpad-right" 'right)
+(register-touch-control "dpad-down" 'down)
+(register-touch-control "dpad-up" 'up)
+(register-touch-control "button-a" 'undo)
+(resize-canvas)
+
 (request-animation-frame draw-callback)
 (timeout update-callback dt)
