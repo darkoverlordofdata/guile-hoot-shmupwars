@@ -14,13 +14,6 @@
   </head>
   <body>
 
-    <canvas id="canvas"></canvas>
-    <p id="wasm-error" hidden="true">
-      A browser with Wasm GC and tail call support is required to play
-      this game.  We recommend using either Mozilla Firefox or Google
-      Chrome.  Safari is currently unsupported.
-    </p>
-
     <div id="onscreen-controls">
       <div id="dpad-container">
         <svg
@@ -190,6 +183,13 @@
         </svg>
       </div>
     </div>
+
+    <canvas id="canvas"></canvas>
+    <p id="wasm-error" hidden="true">
+      A browser with Wasm GC and tail call support is required to play
+      this game.  We recommend using either Mozilla Firefox or Google
+      Chrome.  Safari is currently unsupported.
+    </p>
 
     <!-- Link to the Service Worker -->
     <script src="app.js"></script>
