@@ -162,16 +162,16 @@
 (add-event-listener! (current-document) "keyup"
                      (procedure->external on-key-up))
 
-(define (on-input-up input)
-     (match input
-        ('left (
-          (set! game-x 0)))
-        ('right (
-          (set! game-x 0)))
-        ('up (
-          (set! game-y 0)))
-        ('down (
-          (set! game-y 0)))))
+;;(define (on-input-up input)
+;;     (match input
+;;        ('left (
+;;          (set! game-x 0)))
+;;        ('right (
+;;          (set! game-x 0)))
+;;        ('up (
+;;          (set! game-y 0)))
+;;        ('down (
+;;          (set! game-y 0)))))
 
 (define (on-input-down input)
      (match input
@@ -208,20 +208,20 @@
                      (procedure->external on-key-down))
 
 (define (register-touch-down elem-id input-id)
-  (add-event-listener! (get-element-by-id elem-id) "mousedown"
+  (add-event-listener! (get-element-by-id elem-id) "click"
                        (procedure->external
                         (lambda (e) (on-input-down input-id)))))
 
-(define (register-touch-up elem-id input-id)
-  (add-event-listener! (get-element-by-id elem-id) "mouseup"
-                       (procedure->external
-                        (lambda (e) (on-input-up input-id)))))
+;;(define (register-touch-up elem-id input-id)
+;;  (add-event-listener! (get-element-by-id elem-id) "mouseup"
+;;                       (procedure->external
+;;                        (lambda (e) (on-input-up input-id)))))
 
-(register-touch-up "dpad-left" 'left)
-(register-touch-up "dpad-right" 'right)
-(register-touch-up "dpad-down" 'down)
-(register-touch-up "dpad-up" 'up)
-(register-touch-up "button-a" 'undo)
+;;(register-touch-up "dpad-left" 'left)
+;;(register-touch-up "dpad-right" 'right)
+;;(register-touch-up "dpad-down" 'down)
+;;(register-touch-up "dpad-up" 'up)
+;;(register-touch-up "button-a" 'undo)
 
 (register-touch-down "dpad-left" 'left)
 (register-touch-down "dpad-right" 'right)
