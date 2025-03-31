@@ -18,16 +18,16 @@ canvas {
     margin: auto auto;
 }
 
-@media (pointer: fine) {
+/* @media (pointer: fine) {
     #onscreen-controls {
         display: none;
     }
-}
+} */
 
 /* Onscreen controls for "coarse" pointer devices assumed to be
    touchscreens on phones/tablets.  Inline SVG is used so that we can
    attach click handlers to individual elements of the controls. */
-@media (pointer: coarse) {
+/* @media (pointer: coarse) { */
     #onscreen-controls {
         position: absolute;
         width: 100%;
@@ -49,4 +49,4 @@ canvas {
         margin: 5%;
         margin-left: auto;
     }
-}
+/* } */
