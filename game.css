@@ -16,6 +16,8 @@ body {
 canvas {
     display: block;
     margin: auto auto;
+    position: absolute;
+    top: 10px;
 }
 
 /* @media (pointer: fine) {
