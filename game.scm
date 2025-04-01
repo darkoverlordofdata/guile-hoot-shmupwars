@@ -66,8 +66,8 @@
 (define dt                (/ 1000.0 60.0)) ; aim for updating at 60Hz
 ;;(define game-width        512.0)
 ;;(define game-height       512.0)
-(define game-width        480.0)
-(define game-height       480.0)
+(define game-width        410.0)
+(define game-height       410.0)
 (define game-x            0.0)
 (define game-y            0.0)
 
@@ -80,7 +80,7 @@
 (define canvas            (get-element-by-id "canvas"))
 (define context           (get-context canvas "2d"))
 ;;(define game              (make-game image:background (make-rect 0.0 0.0 512.0 512.0)))
-(define game              (make-game image:background (make-rect 0.0 0.0 480.0 480.0)))
+(define game              (make-game image:background (make-rect 0.0 0.0 410.0 410.0)))
 (define player            (make-player image:player (make-rect 202.0 170.0 54.0 87.0)))
 
 ;;
