@@ -43,14 +43,14 @@ canvas {
     }
 
     #onscreen-controls #dpad-container {
-        transform: scale(2, 2);
+        transform: scale(1.5, 1.5);
         width: min(30vw,30vh);
         height: min(30vw,30vh);
         margin: 5%;
     }
 
     #onscreen-controls #button-container {
-        transform: scale(2, 2);
+        transform: scale(1.5, 1.5);
         width: min(20vw,20vh);
         height: min(20vw,20vh);
         margin: 5%;
