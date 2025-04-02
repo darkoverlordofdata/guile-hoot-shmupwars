@@ -13,11 +13,13 @@ body {
     height: 100vh;
 }
 
+
 canvas {
-    display: block;
+    display: inline;
     margin: auto auto;
     position: absolute;
     top: 80px;
+    left:15px;
     overflow: hidden;
 }
 
@@ -41,12 +43,14 @@ canvas {
     }
 
     #onscreen-controls #dpad-container {
+        transform: scale(2, 2);
         width: min(30vw,30vh);
         height: min(30vw,30vh);
         margin: 5%;
     }
 
     #onscreen-controls #button-container {
+        transform: scale(2, 2);
         width: min(20vw,20vh);
         height: min(20vw,20vh);
         margin: 5%;
