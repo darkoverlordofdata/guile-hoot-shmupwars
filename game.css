@@ -46,14 +46,14 @@ canvas {
         transform: scale(1.5, 1.5);
         width: min(30vw,30vh);
         height: min(30vw,30vh);
-        margin: 5%;
+        margin: 15%;
     }
 
     #onscreen-controls #button-container {
         transform: scale(1.5, 1.5);
         width: min(20vw,20vh);
         height: min(20vw,20vh);
-        margin: 5%;
+        margin: 15%;
         margin-left: auto;
     }
 /* } */
