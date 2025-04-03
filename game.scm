@@ -174,6 +174,17 @@
         ('down (
           (set! game-y 1)))))
 
+(define (on-input-up input)
+     (match input
+        ('left (
+          (set! game-x 0)))
+        ('right (
+          (set! game-x 0)))
+        ('up (
+          (set! game-y 0)))
+        ('down (
+          (set! game-y 0)))))
+
 (define (resize-canvas)
   (let* ((win (current-window))
          (w (window-inner-width win))
@@ -196,6 +207,19 @@
                      (procedure->external (lambda (_) (resize-canvas))))
 (add-event-listener! (current-document) "keydown"
                      (procedure->external on-key-down))
+
+(define (register-touch-control-up elem-id input-id)
+  (add-event-listener! (get-element-by-id elem-id) "mouseup"
+                       (procedure->external
+                        (lambda (e) (on-input-up input-id)))))
+
+(register-touch-control-up "dpad-left" 'left)
+(register-touch-control-up "dpad-right" 'right)
+(register-touch-control-up "dpad-down" 'down)
+(register-touch-control-up "dpad-up" 'up)
+(register-touch-control-up "button-a" 'undo)
+
+
 (define (register-touch-control elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "click"
                        (procedure->external
