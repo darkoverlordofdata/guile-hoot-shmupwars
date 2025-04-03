@@ -208,17 +208,6 @@
 (add-event-listener! (current-document) "keydown"
                      (procedure->external on-key-down))
 
-(define (register-touch-control-down elem-id input-id)
-  (add-event-listener! (get-element-by-id elem-id) "mousedown"
-                       (procedure->external
-                        (lambda (e) (on-input-down input-id)))))
-
-(register-touch-control-down "dpad-left" 'left)
-(register-touch-control-down "dpad-right" 'right)
-(register-touch-control-down "dpad-down" 'down)
-(register-touch-control-down "dpad-up" 'up)
-(register-touch-control-down "button-a" 'undo)
-
 (define (register-touch-control-up elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "mouseup"
                        (procedure->external
@@ -231,6 +220,16 @@
 (register-touch-control-up "button-a" 'undo)
 
 
+(define (register-touch-control elem-id input-id)
+  (add-event-listener! (get-element-by-id elem-id) "click"
+                       (procedure->external
+                        (lambda (e) (on-input-down input-id)))))
+
+(register-touch-control "dpad-left" 'left)
+(register-touch-control "dpad-right" 'right)
+(register-touch-control "dpad-down" 'down)
+(register-touch-control "dpad-up" 'up)
+(register-touch-control "button-a" 'undo)
 (resize-canvas)
 
 (request-animation-frame draw-callback)
