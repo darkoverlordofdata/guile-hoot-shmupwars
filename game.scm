@@ -224,11 +224,11 @@
                        (procedure->external
                         (lambda (e) (on-input-up input-id)))))
 
-;;(register-touch-control-up "dpad-left" 'left)
-;;(register-touch-control-up "dpad-right" 'right)
-;;(register-touch-control-up "dpad-down" 'down)
-;;(register-touch-control-up "dpad-up" 'up)
-;;(register-touch-control-up "button-a" 'undo)
+(register-touch-control-up "dpad-left" 'left)
+(register-touch-control-up "dpad-right" 'right)
+(register-touch-control-up "dpad-down" 'down)
+(register-touch-control-up "dpad-up" 'up)
+(register-touch-control-up "button-a" 'undo)
 
 
 (resize-canvas)
