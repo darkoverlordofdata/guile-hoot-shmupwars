@@ -204,28 +204,60 @@
 (add-event-listener! (current-document) "keydown"
                      (procedure->external on-key-down))
 
-(define (register-touch-control-down elem-id input-id)
+(define (register-mouse-control-down elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "mousedown"
                        (procedure->external
                         (lambda (e) (on-input-down input-id)))))
 
-(register-touch-control-down "dpad-left" 'left)
-(register-touch-control-down "dpad-right" 'right)
-(register-touch-control-down "dpad-down" 'down)
-(register-touch-control-down "dpad-up" 'up)
-(register-touch-control-down "button-a" 'undo)
+(register-mouse-control-down "dpad-left" 'left)
+(register-mouse-control-down "dpad-right" 'right)
+(register-mouse-control-down "dpad-down" 'down)
+(register-mouse-control-down "dpad-up" 'up)
+(register-mouse-control-down "button-a" 'undo)
 
-(define (register-touch-control-up elem-id input-id)
+(define (register-touch-control-start elem-id input-id)
+  (add-event-listener! (get-element-by-id elem-id) "touchstart"
+                       (procedure->external
+                        (lambda (e) (on-input-down input-id)))))
+
+(register-touch-control-start "dpad-left" 'left)
+(register-touch-control-start "dpad-right" 'right)
+(register-touch-control-start "dpad-down" 'down)
+(register-touch-control-start "dpad-up" 'up)
+(register-touch-control-start "button-a" 'undo)
+
+(define (register-mouse-control-up elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "mouseup"
                        (procedure->external
                         (lambda (e) (on-input-up input-id)))))
 
-(register-touch-control-up "dpad-left" 'left)
-(register-touch-control-up "dpad-right" 'right)
-(register-touch-control-up "dpad-down" 'down)
-(register-touch-control-up "dpad-up" 'up)
-(register-touch-control-up "button-a" 'undo)
+(register-mouse-control-up "dpad-left" 'left)
+(register-mouse-control-up "dpad-right" 'right)
+(register-mouse-control-up "dpad-down" 'down)
+(register-mouse-control-up "dpad-up" 'up)
+(register-mouse-control-up "button-a" 'undo)
 
+(define (register-touch-control-cancel elem-id input-id)
+  (add-event-listener! (get-element-by-id elem-id) "touchcancel"
+                       (procedure->external
+                        (lambda (e) (on-input-up input-id)))))
+
+(register-touch-control-cancel "dpad-left" 'left)
+(register-touch-control-cancel "dpad-right" 'right)
+(register-touch-control-cancel "dpad-down" 'down)
+(register-touch-control-cancel "dpad-up" 'up)
+(register-touch-control-cancel "button-a" 'undo)
+
+(define (register-touch-control-end elem-id input-id)
+  (add-event-listener! (get-element-by-id elem-id) "touchend"
+                       (procedure->external
+                        (lambda (e) (on-input-up input-id)))))
+
+(register-touch-control-end "dpad-left" 'left)
+(register-touch-control-end "dpad-right" 'right)
+(register-touch-control-end "dpad-down" 'down)
+(register-touch-control-end "dpad-up" 'up)
+(register-touch-control-end "button-a" 'undo)
 
 (resize-canvas)
 
