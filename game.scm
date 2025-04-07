@@ -138,16 +138,12 @@
   (let ((key (keyboard-event-code event)))
     (cond
     ((string=? key key:left)
-      (set! game-x 0)
-      (set! game-y 0))
+      (set! game-x 0))
     ((string=? key key:right)
-      (set! game-x 0)
-      (set! game-y 0))
+      (set! game-x 0))
     ((string=? key key:up)
-      (set! game-x 0)
       (set! game-y 0))
     ((string=? key key:down)
-      (set! game-x 0)
       (set! game-y 0)))
     ))
 
