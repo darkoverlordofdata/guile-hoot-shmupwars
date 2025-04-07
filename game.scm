@@ -68,8 +68,8 @@
 ;;(define game-height       512.0)
 (define game-width        380.0)
 (define game-height       380.0)
-(define game-x            0.0)
-(define game-y            0.0)
+(define *player-x*            0.0)
+(define *player-y*            0.0)
 
 (define *canvas-scale* 0.0)
 (define *canvas-width* 0)
@@ -89,8 +89,8 @@
 ;;
 (define (update)
   (let ((r (player-rect player)))
-    (set-rect-x! r (+ (rect-x r) game-x))
-    (set-rect-y! r (+ (rect-y r) game-y)))
+    (set-rect-x! r (+ (rect-x r) *player-x*))
+    (set-rect-y! r (+ (rect-y r) *player-y*)))
 
   (timeout update-callback dt))
 (define update-callback (procedure->external update))
@@ -121,13 +121,13 @@
   (let ((key (keyboard-event-code event)))
     (cond
     ((string=? key key:left)
-      (set! game-x (- 0 1)))
+      (set! *player-x* (- 0 1)))
     ((string=? key key:right)
-      (set! game-x 1))
+      (set! *player-x* 1))
     ((string=? key key:up)
-      (set! game-y (- 0 1)))
+      (set! *player-y* (- 0 1)))
     ((string=? key key:down)
-      (set! game-y 1)))
+      (set! *player-y* 1)))
     ))
 
 ;;
@@ -138,13 +138,13 @@
   (let ((key (keyboard-event-code event)))
     (cond
     ((string=? key key:left)
-      (set! game-x 0))
+      (set! *player-x* 0))
     ((string=? key key:right)
-      (set! game-x 0))
+      (set! *player-x* 0))
     ((string=? key key:up)
-      (set! game-y 0))
+      (set! *player-y* 0))
     ((string=? key key:down)
-      (set! game-y 0)))
+      (set! *player-y* 0)))
     ))
 
 ;;
@@ -162,24 +162,24 @@
 (define (on-input-down input)
      (match input
         ('left (
-          (set! game-x (- 0 1))))
+          (set! *player-x* (- 0 1))))
         ('right (
-          (set! game-x 1)))
+          (set! *player-x* 1)))
         ('up (
-          (set! game-y (- 0 1))))
+          (set! *player-y* (- 0 1))))
         ('down (
-          (set! game-y 1)))))
+          (set! *player-y* 1)))))
 
 (define (on-input-up input)
      (match input
         ('left (
-          (set! game-x 0)))
+          (set! *player-x* 0)))
         ('right (
-          (set! game-x 0)))
+          (set! *player-x* 0)))
         ('up (
-          (set! game-y 0)))
+          (set! *player-y* 0)))
         ('down (
-          (set! game-y 0)))))
+          (set! *player-y* 0)))))
 
 (define (resize-canvas)
   (let* ((win (current-window))
