@@ -28,6 +28,7 @@
              (dom window)
              (hoot ffi)
              (hoot hashtables)
+             (rnrs bytevectors)
              (ice-9 match)
              (math)
              (math rect)
@@ -50,6 +51,9 @@
   (image  player-image)
   (rect   player-rect))
 
+(define f64-ref  bytevector-ieee-double-native-ref)
+(define f64-set! bytevector-ieee-double-native-set!)
+
 ;;
 ;; Globals
 ;;
@@ -64,23 +68,21 @@
 (define key:confirm       "Enter")
 
 (define dt                (/ 1000.0 60.0)) ; aim for updating at 60Hz
-;;(define game-width        512.0)
-;;(define game-height       512.0)
 (define game-width        380.0)
 (define game-height       380.0)
-(define *player-x*            0.0)
-(define *player-y*            0.0)
+(define *player-x*          0.0)
+(define *player-y*          0.0)
+(define *velocity*          2)
 
-(define *canvas-scale* 0.0)
-(define *canvas-width* 0)
-(define *canvas-height* 0)
-
+(define *canvas-scale*      0.0)
+(define *canvas-width*    380.0)
+(define *canvas-height*   380.0)
 
 
 (define canvas            (get-element-by-id "canvas"))
-(define context           (get-context canvas "2d"))
-;;(define game              (make-game image:background (make-rect 0.0 0.0 512.0 512.0)))
-(define game              (make-game image:background (make-rect 0.0 0.0 380.0 380.0)))
+(define context           (get-context canvas "2d")) 
+;; TODO -                 (get-context canvas "webgl"))
+(define game              (make-game image:background (make-rect 0.0 0.0 (inexact->exact game-width) (inexact->exact game-height))))
 (define player            (make-player image:player (make-rect 202.0 170.0 54.0 87.0)))
 
 ;;
@@ -121,13 +123,13 @@
   (let ((key (keyboard-event-code event)))
     (cond
     ((string=? key key:left)
-      (set! *player-x* (- 0 1)))
+      (set! *player-x* (- 0 *velocity*)))
     ((string=? key key:right)
-      (set! *player-x* 1))
+      (set! *player-x* *velocity*))
     ((string=? key key:up)
-      (set! *player-y* (- 0 1)))
+      (set! *player-y* (- 0 *velocity*)))
     ((string=? key key:down)
-      (set! *player-y* 1)))
+      (set! *player-y* *velocity*)))
     ))
 
 ;;
@@ -148,28 +150,24 @@
     ))
 
 ;;
-;; wire up the events and start
+;; on-input-down event handler
 ;;
 ;;
-(set-element-width! canvas (inexact->exact game-width))
-(set-element-height! canvas (inexact->exact game-height))
-(add-event-listener! (current-document) "keydown"
-                     (procedure->external on-key-down))
-(add-event-listener! (current-document) "keyup"
-                     (procedure->external on-key-up))
-
-
 (define (on-input-down input)
      (match input
         ('left (
-          (set! *player-x* (- 0 1))))
+          (set! *player-x* (- 0 *velocity*))))
         ('right (
-          (set! *player-x* 1)))
+          (set! *player-x* *velocity*)))
         ('up (
-          (set! *player-y* (- 0 1))))
+          (set! *player-y* (- 0 *velocity*))))
         ('down (
-          (set! *player-y* 1)))))
+          (set! *player-y* *velocity*)))))
 
+;;
+;; on-input-up event handler
+;;
+;;
 (define (on-input-up input)
      (match input
         ('left (
@@ -181,6 +179,10 @@
         ('down (
           (set! *player-y* 0)))))
 
+;;
+;; resize-canvas event handler
+;;
+;;
 (define (resize-canvas)
   (let* ((win (current-window))
          (w (window-inner-width win))
@@ -197,68 +199,58 @@
     (set! *canvas-width* (* game-width *canvas-scale*))
     (set! *canvas-height* (* game-height *canvas-scale*))))
 
-(set-element-width! canvas (inexact->exact game-width))
-(set-element-height! canvas (inexact->exact game-height))
+;;
+;; add event handlers
+;;
+;;
 (add-event-listener! (current-window) "resize"
                      (procedure->external (lambda (_) (resize-canvas))))
 (add-event-listener! (current-document) "keydown"
                      (procedure->external on-key-down))
+(add-event-listener! (current-document) "keyup"
+                     (procedure->external on-key-up))
+
 
 (define (register-mouse-control-down elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "mousedown"
                        (procedure->external
                         (lambda (e) (on-input-down input-id)))))
 
-(register-mouse-control-down "dpad-left" 'left)
-(register-mouse-control-down "dpad-right" 'right)
-(register-mouse-control-down "dpad-down" 'down)
-(register-mouse-control-down "dpad-up" 'up)
-(register-mouse-control-down "button-a" 'undo)
-
 (define (register-touch-control-start elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "touchstart"
                        (procedure->external
                         (lambda (e) (on-input-down input-id)))))
-
-(register-touch-control-start "dpad-left" 'left)
-(register-touch-control-start "dpad-right" 'right)
-(register-touch-control-start "dpad-down" 'down)
-(register-touch-control-start "dpad-up" 'up)
-(register-touch-control-start "button-a" 'undo)
 
 (define (register-mouse-control-up elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "mouseup"
                        (procedure->external
                         (lambda (e) (on-input-up input-id)))))
 
-(register-mouse-control-up "dpad-left" 'left)
-(register-mouse-control-up "dpad-right" 'right)
-(register-mouse-control-up "dpad-down" 'down)
-(register-mouse-control-up "dpad-up" 'up)
-(register-mouse-control-up "button-a" 'undo)
-
 (define (register-touch-control-cancel elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "touchcancel"
                        (procedure->external
                         (lambda (e) (on-input-up input-id)))))
-
-(register-touch-control-cancel "dpad-left" 'left)
-(register-touch-control-cancel "dpad-right" 'right)
-(register-touch-control-cancel "dpad-down" 'down)
-(register-touch-control-cancel "dpad-up" 'up)
-(register-touch-control-cancel "button-a" 'undo)
 
 (define (register-touch-control-end elem-id input-id)
   (add-event-listener! (get-element-by-id elem-id) "touchend"
                        (procedure->external
                         (lambda (e) (on-input-up input-id)))))
 
-(register-touch-control-end "dpad-left" 'left)
-(register-touch-control-end "dpad-right" 'right)
-(register-touch-control-end "dpad-down" 'down)
-(register-touch-control-end "dpad-up" 'up)
-(register-touch-control-end "button-a" 'undo)
+(define (register-events registration-id)
+  (registration-id    "dpad-left"   'left)
+  (registration-id    "dpad-right"  'right)
+  (registration-id    "dpad-down"   'down)
+  (registration-id    "dpad-up"     'up)
+  (registration-id    "button-a"    'undo))
+  
+(register-events register-mouse-control-down)
+(register-events register-touch-control-start)
+(register-events register-mouse-control-up)
+(register-events register-touch-control-cancel)
+(register-events register-touch-control-end)
 
+(set-element-width! canvas (inexact->exact game-width))
+(set-element-height! canvas (inexact->exact game-height))
 (resize-canvas)
 
 (request-animation-frame draw-callback)
